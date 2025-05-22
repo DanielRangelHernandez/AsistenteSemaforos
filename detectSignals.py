@@ -11,18 +11,17 @@ def hablar_color(color):
 
 # Cargar modelo
 # El modelo debe de quedar mejor manejado dado que solo detecta ciertas señales
-model = YOLO('best.pt')  # o 'best.pt' si lo tienes entrenado
+model = YOLO('modelo1.pt')
 
-# Abrir cámara
+#for cls_id, label in model.names.items():
+#    print(f'{cls_id}: {label}')
+
 cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
 
-    # Predicción
     results = model.predict(source=frame, verbose=False)[0]
-
-    # Dibujo de cajas
     
     if results.boxes is not None and len(results.boxes) > 0:
         for box in results.boxes:
@@ -31,13 +30,13 @@ while True:
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             #Modificar para que solo suene una vez
-            match label:
-                case 'red_light':
-                    hablar_color('rojo')
-                case 'yellow_light':
-                    hablar_color('amarillo')
-                case 'green_light':
-                    hablar_color('verde')
+            #match label:
+            #    case 'red_light':
+            #        hablar_color('rojo')
+            #    case 'yellow_light':
+            #        hablar_color('amarillo')
+            #    case 'green_light':
+            #        hablar_color('verde')
                     
             cv2.putText(frame, f'{label}', (x1, y1 - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0), 2)
